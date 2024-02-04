@@ -1,0 +1,74 @@
+package Online_Reservation;
+
+public class Reservation {
+	private String passengername;
+    private String trainName;
+    private String trainno;
+    private String date;
+    private String classtype;
+    private String arrival;
+    private String destination;
+    private int prnno;
+	public Reservation(String passengername, String trainName, String trainno, String date, String classtype,
+			String arrival, String destination, int prnno) {
+		super();
+		this.passengername = passengername;
+		this.trainName = trainName;
+		this.trainno = trainno;
+		this.date = date;
+		this.classtype = classtype;
+		this.arrival = arrival;
+		this.destination = destination;
+		this.prnno = prnno;
+	}
+	
+	public String getPassengername() {
+		return passengername;
+	}
+	public String getTrainName() {
+		return trainName;
+	}
+	public String getTrainno() {
+		return trainno;
+	}
+	public String getDate() {
+		return date;
+	}
+	public String getClasstype() {
+		return classtype;
+	}
+	public String getArrival() {
+		return arrival;
+	}
+	public String getDestination() {
+		return destination;
+	}
+	public int getPrnno() {
+		return prnno;
+	}
+	public void setPassengername(String passengername) {
+		this.passengername = passengername;
+	}
+	public void setTrainName(String trainName) {
+		this.trainName = trainName;
+	}
+	public void setTrainno(String trainno) {
+		this.trainno = trainno;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
+	public void setClasstype(String classtype) {
+		this.classtype = classtype;
+	}
+	public void setArrival(String arrival) {
+		this.arrival = arrival;
+	}
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
+	public void setPrnno(int prnno) {
+		this.prnno = prnno;
+	}
+	
+}
