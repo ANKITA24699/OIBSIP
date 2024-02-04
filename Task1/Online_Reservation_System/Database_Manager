@@ -1,0 +1,113 @@
+package Online_Reservation;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+
+public class Database_Manager {
+	 public static boolean authenticateUser(String username,String password)
+	    {
+	    	try {
+	    		Class.forName("com.mysql.cj.jdbc.Driver");
+	    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Online_reservation",  "root", "Ankita@123");
+	             PreparedStatement ps = con.prepareStatement("SELECT * FROM Online_reservation.User WHERE username = ? AND password = ?");
+	             ps.setString(1, username);
+	             ps.setString(2, password);
+
+	             ResultSet resultSet = ps.executeQuery();
+	             return resultSet.next();
+	               }
+	            catch (Exception e) {
+	               e.printStackTrace();
+	           }
+	           return false;
+	    }
+	    public static boolean insertuser(String username, String password)
+		 {
+			String query = "INSERT INTO Online_reservation.User (username, password) VALUES (?, ?)";
+
+	       try {
+	    	    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Online_reservation",  "root", "Ankita@123");
+	            PreparedStatement ps = con.prepareStatement(query);
+
+	            ps.setString(1, username);
+	            ps.setString(2, password);
+	           
+
+	           int affectedRow = ps.executeUpdate();
+	           return affectedRow > 0;
+
+	       } catch (SQLException e) {
+	           e.printStackTrace();
+	       }
+
+	       return false;
+	   }
+	    public static void insertReservation(Reservation reservation)
+	    {
+	    	try {
+	    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Online_reservation",  "root", "Ankita@123");
+	            PreparedStatement ps = con.prepareStatement("INSERT INTO Online_reservation.Reservation (passengername,trainName,trainno,date,classtype,arrival,destination,prnno) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+	            
+	    		ps.setString(1, reservation.getPassengername());
+	    	    ps.setString(2, reservation.getTrainName());
+	    		ps.setString(3, reservation.getTrainno());
+	    		ps.setString(4, reservation.getDate());
+	    		ps.setString(5, reservation.getClasstype());
+	    		ps.setString(6, reservation.getArrival());
+	    		ps.setString(7,reservation.getDestination());
+	    		ps.setInt(8, reservation.getPrnno());
+
+	            ps.executeUpdate();
+	           } 
+	    	catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    public static Reservation getUserDetailsByPrn(int prnno) {
+	        String query = "SELECT * FROM Online_reservation.Reservation WHERE prnno = ?";
+	        Reservation reservation = null;
+
+	        try {
+	        	 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Online_reservation", "root", "Ankita@123");
+	             PreparedStatement ps = con.prepareStatement(query);
+
+	             ps.setInt(1, prnno);
+
+	             ResultSet rs = ps.executeQuery();
+	                if (rs.next()) {
+	                	reservation=new Reservation(query, query, query, query, query, query, query, prnno);
+	                	reservation.setPassengername(rs.getString("passengername"));;
+	                	reservation.setTrainName(rs.getString("trainName"));
+	                	reservation.setTrainno(rs.getString("trainno"));
+	                	reservation.setDate(rs.getString("date"));
+	                	reservation.setClasstype(rs.getString("classtype"));
+	                	reservation.setArrival(rs.getString("arrival"));
+	                	reservation.setDestination(rs.getString("destination"));
+	                    
+	                }
+	            
+	        }catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+	        return reservation;
+	    }
+	    public static void deleteReservation(int prnno) {
+	        try {
+	        	 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Online_reservation", "root", "Ankita@123");
+	             PreparedStatement ps = con.prepareStatement("DELETE FROM Online_reservation.Reservation WHERE prnno = ?");
+	             ps.setInt(1, prnno);
+
+	             ps.executeUpdate();
+	           } 
+	        catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    
+}
