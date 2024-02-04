@@ -1,0 +1,108 @@
+package Online_Reservation;
+
+import java.util.Scanner;
+
+
+public class Main_Driver {
+	public static void main(String[]args)
+	   {
+		   Scanner sc =new Scanner(System.in);
+		   String username, password;
+
+	       do {
+	           System.out.print("Enter username: ");
+	           username = sc.nextLine().trim();
+
+	           if (username.isEmpty()) {
+	               System.out.println("Username cannot be empty. Try again.");
+	           }
+	       } while (username.isEmpty());
+
+	       do {
+	           System.out.print("Enter password: ");
+	           password = sc.nextLine();
+
+	           if (password.isEmpty()) {
+	               System.out.println("Password cannot be empty. Try again.");
+	           }
+	       }
+	       while (password.isEmpty());
+	       if(Database_Manager.authenticateUser(username, password))
+	 	  {
+	 	     System.out.println("Login Successfully!!");
+	 	     
+	 	     System.out.println("Enter Passenger name: ");
+	 	     String passengername=sc.next();
+	 	     
+	 	     System.out.println("Enter Train name: ");
+	 	     String trainName =sc.next();
+	 	     
+	 	     System.out.println("Enter Train no: ");
+	 	     String trainno=sc.next();
+	 	     
+	 	     System.out.println("Enter date of journey: ");
+	 	     String date = sc.next();
+	 	     
+	 	     System.out.println("Enter classtype: ");
+	 	     String classtype =sc.next();
+	 	     
+	 	     System.out.println("Enter from city: ");
+	 	     String arrival=sc.next();
+	 	     
+	 	     System.out.println("Enter destination: ");
+	 	     String destination=sc.next();
+	 	     
+	 	     int prnno = (int) (Math.random() * 1000000); 
+	 	     
+	 	     Reservation reservation = new Reservation(passengername,trainName,trainno, date,classtype,arrival,destination, prnno);
+	 	     Database_Manager.insertReservation(reservation);
+	 	     
+	 	     System.out.println("Reservation successful!!. Your PRN: " + prnno);
+	 	     
+	 	     System.err.print("Enter PRN for details: ");
+	          int prnno1 = sc.nextInt();
+	          sc.nextLine(); // Consume the newline character
+
+	          Reservation userDetails = Database_Manager.getUserDetailsByPrn(prnno1);
+	          if (userDetails != null) {
+	              System.out.println("User Details:");
+	              System.out.println("Passengername: " + userDetails.getPassengername());
+	              System.out.println("TrainName: " + userDetails.getTrainName());
+	              System.out.println("Trainno: " + userDetails.getTrainno());
+	              System.out.println("date: " + userDetails.getDate());
+	              System.out.println("classtype: " + userDetails.getClasstype());
+	              System.out.println("arrival: " + userDetails.getArrival());
+	              System.out.println("destination: " + userDetails.getDestination());    
+	          } 
+	          else
+	          {
+	              System.out.println("User not found with PRN: " + prnno1);
+	          }
+	 	     }
+	         System.err.print("Do you want to cancel the reservation? (yes/no): ");
+	  	     String cancelChoice = sc.next();
+	  	     
+	  	     if(cancelChoice.equalsIgnoreCase("yes"))
+	  	     {
+	  	    	 System.out.print("Enter PRN to cancel reservation: ");
+	               int prnToCancel = sc.nextInt();
+	               Database_Manager.deleteReservation(prnToCancel);
+	               System.out.println("Reservation with PRN " + prnToCancel + " canceled successfully.");
+	  	      }
+	 	      
+	          else {
+	      		  System.out.println("Authentication failed!!. proceeding to registration..");
+	      		  doRegistration(username,password);
+	      	  }
+	 	  sc.close();
+	 	     
+	   }
+	   private static void doRegistration(String username, String password) {
+	      
+	       if (Database_Manager.insertuser(username, password)) {
+	           System.out.println("Registration successful!");
+	       } else {
+	           System.out.println("Registration failed. Please try again.");
+	       }
+	    }
+}
